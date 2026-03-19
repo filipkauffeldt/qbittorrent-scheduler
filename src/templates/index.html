@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>qBittorrent Scheduler</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>qBittorrent Scheduler</h1>
+
+        <section id="status-section">
+            <h2>Status</h2>
+            <div class="status-grid">
+                <div class="status-card">
+                    <span class="status-label">Current Time</span>
+                    <span class="status-value" id="current-time">--:--:--</span>
+                </div>
+                <div class="status-card">
+                    <span class="status-label">Schedule State</span>
+                    <span class="status-value" id="schedule-state">--</span>
+                </div>
+                <div class="status-card">
+                    <span class="status-label">Active Windows</span>
+                    <span class="status-value" id="active-windows">--</span>
+                </div>
+                <div class="status-card">
+                    <span class="status-label">Active Torrents</span>
+                    <span class="status-value" id="torrent-count">--</span>
+                </div>
+                <div class="status-card">
+                    <span class="status-label">Paused Torrents</span>
+                    <span class="status-value" id="paused-count">--</span>
+                </div>
+                <div class="status-card">
+                    <span class="status-label">Scheduler</span>
+                    <span class="status-value" id="scheduler-status">--</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="connection-section">
+            <h2>Connection</h2>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="qbit-url">qBittorrent URL</label>
+                    <input type="url" id="qbit-url" placeholder="http://192.168.1.1:8080">
+                </div>
+                <div class="form-group">
+                    <label for="qbit-user">Username</label>
+                    <input type="text" id="qbit-user" placeholder="admin">
+                </div>
+                <div class="form-group">
+                    <label for="qbit-password">Password</label>
+                    <input type="password" id="qbit-password" placeholder="password">
+                </div>
+                <div class="form-group">
+                    <label for="scan-interval">Scan Interval (seconds)</label>
+                    <input type="number" id="scan-interval" min="5" max="3600" value="60">
+                </div>
+            </div>
+            <button class="btn btn-primary" onclick="saveConnection()">Save Connection</button>
+            <span id="connection-status" class="status-msg"></span>
+        </section>
+
+        <section id="schedule-section">
+            <div class="section-header">
+                <h2>Pause Windows</h2>
+                <div class="toggle-row">
+                    <label class="toggle-label">
+                        <span>Enabled</span>
+                        <input type="checkbox" id="schedule-enabled" checked onchange="onToggleChange()">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+            <p class="help-text">Define time windows when torrents should be paused. Multiple windows are allowed. Changes apply automatically.</p>
+            <div id="windows-list"></div>
+            <button class="btn btn-secondary" onclick="addWindow()">+ Add Window</button>
+            <span id="schedule-status" class="status-msg"></span>
+        </section>
+
+        <section id="log-section">
+            <h2>Recent Logs</h2>
+            <div class="log-container">
+                <div id="log-output"></div>
+            </div>
+            <button class="btn btn-secondary btn-small" onclick="fetchLogs()">Refresh</button>
+        </section>
+    </div>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>

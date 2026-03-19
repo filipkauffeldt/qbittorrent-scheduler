@@ -1,0 +1,20 @@
+services:
+  qbittorrent-scheduler:
+    build: .
+    container_name: qbittorrent-scheduler
+    restart: unless-stopped
+    ports:
+      - "8081:8081"
+    environment:
+      QBITTORRENT_URL: http://gluetun:8080
+      QBITTORRENT_USER: admin
+      QBITTORRENT_PASSWORD: yourpassword
+      SCAN_INTERVAL_SECONDS: 60
+      HTTP_TIMEOUT_SECONDS: 10
+      LOG_LEVEL: INFO
+      WEB_HOST: 0.0.0.0
+      WEB_PORT: 8081
+    volumes:
+      - ./config:/config
+    networks:
+      - default
