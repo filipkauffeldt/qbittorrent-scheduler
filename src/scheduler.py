@@ -94,8 +94,23 @@ class QBittorrentClient:
             {"username": self.username, "password": self.password},
         )
         response.raise_for_status()
-        if "ok" not in response.text.lower():
+        body = response.text.strip().lower()
+        if body.startswith("ok"):
+            self._authenticated = True
+            return
+        if body and "fail" in body:
             raise RuntimeError(f"qBittorrent login failed: {response.text!r}")
+        # An empty 200 body happens when qBittorrent doesn't require auth for
+        # this client (whitelisted subnet/localhost bypass) or the session is
+        # already valid. Confirm with an authenticated endpoint.
+        probe = self.session.get(
+            f"{self.base_url}/api/v2/app/version", timeout=self.timeout
+        )
+        if probe.status_code != 200:
+            raise RuntimeError(
+                f"qBittorrent login failed: {response.text!r} "
+                f"(version check returned {probe.status_code})"
+            )
         self._authenticated = True
 
     def _ensure_auth(self) -> None:
